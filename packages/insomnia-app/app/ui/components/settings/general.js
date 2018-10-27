@@ -446,11 +446,28 @@ class General extends React.PureComponent<Props, State> {
             </div>
             <div className="form-control form-control--thin">
               <label className="inline-block">
-                Automatically download and install updates
+                Check for updates in background
                 <HelpTooltip className="space-left">
-                  If disabled, you will receive a notification when a new update is available
+                  App needs to be restarted after changing this option
                 </HelpTooltip>
                 <input
+                  type="checkbox"
+                  name="checkForUpdates"
+                  checked={settings.checkForUpdates}
+                  onChange={this._handleUpdateSetting}
+                />
+              </label>
+            </div>
+            <div className="form-control form-control--thin">
+              <label className="inline-block">
+                Automatically download and install updates
+                <HelpTooltip className="space-left">
+                  {settings.checkForUpdates
+                    ? 'If disabled, you will receive a notification when a new update is available'
+                    : 'Check for updates setting above should be enabled first'}
+                </HelpTooltip>
+                <input
+                  disabled={!settings.checkForUpdates}
                   type="checkbox"
                   name="updateAutomatically"
                   checked={settings.updateAutomatically}

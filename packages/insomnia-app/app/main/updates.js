@@ -92,13 +92,7 @@ export async function init() {
     await _checkForUpdates(true);
   });
 
-  // Check for updates on an interval
-  setInterval(async () => {
-    await _checkForUpdates(false);
-  }, CHECK_FOR_UPDATES_INTERVAL);
-
-  // Check for updates immediately
-  await _checkForUpdates(false);
+  _initBackgroundChecking();
 }
 
 function _showUpdateNotification() {
@@ -145,4 +139,20 @@ async function _checkForUpdates(force: boolean) {
     console.warn('[updater] Failed to check for updates:', err.message);
     _sendUpdateComplete(false, 'Update Error');
   }
+}
+
+async function _initBackgroundChecking() {
+  const { checkForUpdates } = await models.settings.getOrCreate();
+
+  if (!checkForUpdates) {
+    return Promise.resolve();
+  }
+
+  // Check for updates on an interval
+  setInterval(async () => {
+    await _checkForUpdates(false);
+  }, CHECK_FOR_UPDATES_INTERVAL);
+
+  // Check for updates immediately
+  await _checkForUpdates(false);
 }
